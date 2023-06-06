@@ -1,9 +1,9 @@
 # crud.py
 from typing import List
 from sqlalchemy.orm import Session
-from exceptions import PlayerInfoInfoAlreadyExistError, PlayerInfoNotFoundError, PlayerInfoInvalid, EmailInvalid
-from models import PlayerInfo
-from schemas import CreateAndUpdatePlayer
+from exceptions.exceptions import PlayerInfoInfoAlreadyExistError, PlayerInfoNotFoundError, PlayerInfoInvalid, EmailInvalid
+from models.models import PlayerInfo
+from models.schemas import CreateAndUpdatePlayer
 from email_validator import validate_email, EmailNotValidError
 
 # Function to get list of Player info

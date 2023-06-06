@@ -1,6 +1,6 @@
 from sqlalchemy.schema import Column
 from sqlalchemy.types import String, Integer, Enum
-from database import Base
+from database.database import Base
 from sqlalchemy.orm import validates
 import enum
 

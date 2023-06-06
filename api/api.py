@@ -3,18 +3,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi_utils.cbv import cbv
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from crud import get_all_players, create_player, get_player_info_by_id, update_player_info, delete_player_info, get_player_info_by_email, create_player_pairings, create_tournament
-from database import get_db
-from exceptions import PlayerInfoException
-from schemas import Player, CreateAndUpdatePlayer, PaginatedPlayerInfo
+from crud.crud import get_all_players, create_player, get_player_info_by_id, update_player_info, delete_player_info, get_player_info_by_email, create_player_pairings, create_tournament
+from database.database import get_db
+from exceptions.exceptions import PlayerInfoException
+from models.schemas import Player, CreateAndUpdatePlayer, PaginatedPlayerInfo\
+
 
 router = APIRouter()
-
-class InputData(BaseModel):
-    input: str
-
-class OutputData(BaseModel):
-    output: str
 
 @cbv(router)
 class Players:
