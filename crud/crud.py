@@ -78,6 +78,7 @@ def delete_player_info(session: Session, _id: int):
     if player_info is None:
         raise PlayerInfoNotFoundError
 
+    # Nitin
     session.delete(player_info)
     session.commit()
 
