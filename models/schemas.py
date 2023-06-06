@@ -11,7 +11,6 @@ class CreateAndUpdatePlayer(BaseModel):
     rating: str
 
 
-# TO support list and get APIs
 class Player(CreateAndUpdatePlayer):
     id: int
 
@@ -19,8 +18,20 @@ class Player(CreateAndUpdatePlayer):
         orm_mode = True
 
 
-# To support list cars API
 class PaginatedPlayerInfo(BaseModel):
     limit: int
     offset: int
     data: List[Player]
+
+class SinglesMatch(BaseModel):
+    player1: Player
+    player2: Player
+    score: str
+    winner: Player    
+
+class DoublesMatch(BaseModel):
+    player1: List[Player]
+    player2: List[Player]
+    score: str
+    winner: Player    
+    
