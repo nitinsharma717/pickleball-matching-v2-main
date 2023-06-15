@@ -2,8 +2,8 @@
 from typing import List
 from sqlalchemy.orm import Session
 from exceptions.exceptions import PlayerInfoInfoAlreadyExistError, PlayerInfoNotFoundError, PlayerInfoInvalid, EmailInvalid
-from models.models import PlayerInfo
-from models.schemas import CreateAndUpdatePlayer
+from models.models import PlayerInfo, SinglesMatchInfo
+from models.schemas import CreateAndUpdatePlayer, CreateAndUpdateSinglesMatch 
 from email_validator import validate_email, EmailNotValidError
 
 # Function to get list of Player info
@@ -82,45 +82,46 @@ def delete_player_info(session: Session, _id: int):
     session.delete(player_info)
     session.commit()
 
+
 # function to create matches between people by email
 def create_player_pairings(session: Session, _emails: list, _isDouble: bool):
     players_info = []
     for email in _emails:
         players_info.append(get_player_info_by_email(session, email))
-    return create_matches(players=players_info, isDouble=_isDouble)
+    return create_matches(players=players_info)
 
-def create_matches(players, isDouble = False):
-    if isDouble:
-        sorted_players = sorted(players, key=lambda x: x.rating, reverse=True)
-        matches = []
-        while len(sorted_players) >= 4:
-            pair1 = sorted_players.pop(0)
-            pair2 = sorted_players.pop(0)
-            pair3 = sorted_players.pop(0)
-            pair4 = sorted_players.pop(0)
-            matches.append([[pair1, pair4], [pair2, pair3]])
-        return matches
-
-    sorted_players = sorted(players, key=lambda x: x.rating, reverse=True)
+def create_matches(players):
+    sorted_players = sorted(players, key = lambda x: x.rating, reverse = True)
     matches = []
-    while len(sorted_players) >= 2:
-        pair1 = sorted_players.pop(0)
-        pair2 = sorted_players.pop(0)
-        matches.append([pair1, pair2])
-
+    while (len(sorted_players) >= 2):
+        player1 = sorted_players.pop(0)
+        player2 = sorted_players.pop(0)
+        match = SinglesMatchInfo(player1, player2, "0-0")
+        matches.append(match)
     return matches
 
-def create_tournament(session: Session, _emails: list):
-    players_info = []
-    for email in _emails:
-        players_info.append(get_player_info_by_email(session, email))
-    sorted_players = sorted(players_info, key=lambda x: x.rating, reverse=True)
-    matches = []
-    while len(sorted_players) >= 2:
-        pair1 = sorted_players.pop(0)
-        pair2 = sorted_players.pop()
-        matches.append([pair1, pair2])
-    return matches
+
+
+# def create_matches(players, isDouble = False):
+#     if isDouble:
+#         sorted_players = sorted(players, key=lambda x: x.rating, reverse=True)
+#         matches = []
+#         while len(sorted_players) >= 4:
+#             pair1 = sorted_players.pop(0)
+#             pair2 = sorted_players.pop(0)
+#             pair3 = sorted_players.pop(0)
+#             pair4 = sorted_players.pop(0)
+#             matches.append([[pair1, pair4], [pair2, pair3]])
+#         return matches
+
+#     sorted_players = sorted(players, key=lambda x: x.rating, reverse=True)
+#     matches = []
+#     while len(sorted_players) >= 2:
+#         pair1 = sorted_players.pop(0)
+#         pair2 = sorted_players.pop(0)
+#         matches.append([pair1, pair2])
+
+#     return matches
 
 
 

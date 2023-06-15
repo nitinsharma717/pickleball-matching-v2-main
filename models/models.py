@@ -16,4 +16,12 @@ class PlayerInfo(Base):
     rating = Column(String, nullable=False)
 
 
+class SinglesMatchInfo(Base):
+    __tablename__ = "matches"
+    id = Column(Integer, primary_key=True, index=True)
+    player1 = Column(String, nullable=False)
+    player2 = Column(String, nullable=False)
+    score = Column(String, nullable = True)
+    winner = Column(String, nullable = True)
+    
 

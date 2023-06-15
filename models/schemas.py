@@ -23,15 +23,27 @@ class PaginatedPlayerInfo(BaseModel):
     offset: int
     data: List[Player]
 
-class SinglesMatch(BaseModel):
+
+class CreateAndUpdateSinglesMatch(BaseModel):
     player1: Player
     player2: Player
     score: str
     winner: Player    
 
-class DoublesMatch(BaseModel):
+class CreateAndUpdateDoublesMatch(BaseModel):
     player1: List[Player]
     player2: List[Player]
     score: str
     winner: Player    
-    
+
+class SinglesMatch(CreateAndUpdateSinglesMatch):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class DoublesMatch(CreateAndUpdateDoublesMatch):
+    id: int
+
+    class Config:
+        orm_mode = True
