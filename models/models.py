@@ -14,6 +14,8 @@ class PlayerInfo(Base):
     lastName = Column(String, nullable=False)
     email = Column(String, nullable=False)
     rating = Column(String, nullable=False)
+    win = Column(Integer, nullable = True)
+    loss = Column(Integer, nullable = True)
 
 
 class SinglesMatchInfo(Base):

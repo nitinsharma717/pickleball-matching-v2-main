@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi_utils.cbv import cbv
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from crud.crud import get_all_players, create_player, get_player_info_by_id, update_player_info, delete_player_info, get_player_info_by_email, create_player_pairings, create_tournament
+from crud.crud import get_all_players, create_player, get_player_info_by_id, update_player_info, delete_player_info, get_player_info_by_email
 from database.database import get_db
 from exceptions.exceptions import PlayerInfoException
 from models.schemas import Player, CreateAndUpdatePlayer, PaginatedPlayerInfo\
@@ -27,23 +27,22 @@ class Players:
     # API endpoint to add a player info to the database
     @router.post("/players")
     def add_player(self, player_info: CreateAndUpdatePlayer):
-
         try:
             player_info = create_player(self.session, player_info)
             return player_info
         except PlayerInfoException as cie:
             raise HTTPException(**cie.__dict__)
     
-    @router.post("/matches")
-    def create_matches(self, email_list: list[str], isDouble: bool):
+    # @router.post("/matches")
+    # def create_matches(self, email_list: list[str], isDouble: bool):
         try:
             match_info = create_player_pairings(self.session, email_list, isDouble)
             return match_info
         except PlayerInfoException as cie:
             raise HTTPException(**cie.__dict__)
     
-    @router.post("/tournament")
-    def create_tournament(self, email_list: list[str]):
+    # @router.post("/tournament")
+    # def create_tournament(self, email_list: list[str]):
         try:
             match_info = create_tournament(self.session, email_list)
             return match_info
