@@ -1,5 +1,5 @@
 from sqlalchemy.schema import Column
-from sqlalchemy.types import String, Integer, Enum
+from sqlalchemy.types import String, Integer, Enum, DateTime
 from database.database import Base
 from sqlalchemy.orm import validates
 import enum
@@ -18,12 +18,14 @@ class PlayerInfo(Base):
     loss = Column(Integer, nullable = True)
 
 
-class SinglesMatchInfo(Base):
-    __tablename__ = "matches"
+class MatchInfo(Base):
+    __tablename__ = "match"
     id = Column(Integer, primary_key=True, index=True)
-    player1 = Column(String, nullable=False)
-    player2 = Column(String, nullable=False)
-    score = Column(String, nullable = True)
-    winner = Column(String, nullable = True)
+    opponent1 = Column(Integer, nullable=False)
+    opponent2 = Column(Integer, nullable=False)
+    score = Column(String, nullable = False)
+    winner = Column(Integer, nullable = False)
+    date = Column(DateTime, nullable = False)
+    location = Column(String, nullable = False)
     
 

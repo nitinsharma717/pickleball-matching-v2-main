@@ -4,9 +4,10 @@ from fastapi_utils.cbv import cbv
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from crud.crud import get_all_players, create_player, get_player_info_by_id, update_player_info, delete_player_info, get_player_info_by_email
+from crud.crud import get_all_matches, get_match_info_by_id, create_match, update_match_info, delete_match_info
 from database.database import get_db
 from exceptions.exceptions import PlayerInfoException
-from models.schemas import Player, CreateAndUpdatePlayer, PaginatedPlayerInfo\
+from models.schemas import Player, CreateAndUpdatePlayer, PaginatedPlayerInfo, Match, PaginatedMatchInfo, CreateAndUpdateMatch
 
 
 router = APIRouter()
@@ -89,3 +90,19 @@ def delete_player(player_id: int, session: Session = Depends(get_db)):
 
 # API to create a list of players that will be a part of Session
 
+
+# API to get the list of player info
+@router.get("/matches", response_model=PaginatedMatchInfo)
+def list_matches(limit: int = 10, offset: int = 0, session: Session = Depends(get_db)):
+    matches_list = get_all_matches(session, limit, offset)
+    response = {"limit": limit, "offset": offset, "data": matches_list}
+    return response
+
+# API endpoint to add a player info to the database
+@router.post("/matches")
+def add_match(match_info: CreateAndUpdateMatch, session: Session = Depends(get_db)):
+    try:
+        match_info = create_match(session, match_info)
+        return match_info
+    except PlayerInfoException as cie:
+        raise HTTPException(**cie.__dict__)

@@ -1,8 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List
-
-
-# TO support creation and update APIs
+from datetime import datetime
+# PLAYER SCHEMAS
 class CreateAndUpdatePlayer(BaseModel):
     firstName: str 
     middleInitials: Optional[str]
@@ -11,8 +10,6 @@ class CreateAndUpdatePlayer(BaseModel):
     rating: str
     win: str
     loss: str
-
-
 
 class Player(CreateAndUpdatePlayer):
     id: int
@@ -27,3 +24,23 @@ class PaginatedPlayerInfo(BaseModel):
     data: List[Player]
 
 
+# MATCH SCHEMAS
+class CreateAndUpdateMatch(BaseModel):
+    opponent1: str; 
+    opponent2: str; 
+    score: str 
+    winner: str 
+    date: datetime
+    location: str
+
+class Match(CreateAndUpdateMatch):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class PaginatedMatchInfo(BaseModel):
+    limit: int
+    offset: int
+    data: List[Match]

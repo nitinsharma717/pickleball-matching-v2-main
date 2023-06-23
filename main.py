@@ -25,4 +25,4 @@ app.include_router(api.router)
 # GET operation at route '/'
 @app.get('/')
 def root_api():
-    return {"message": "Welcome to Balasundar's Technical Blog"}
+    return {"message": "HEE HEE HEE HAW! OOH HOO HOO HUI! GRRRRR!"}
