@@ -26,10 +26,10 @@ class PaginatedPlayerInfo(BaseModel):
 
 # MATCH SCHEMAS
 class CreateAndUpdateMatch(BaseModel):
-    opponent1: str; 
-    opponent2: str; 
+    opponent1: int; 
+    opponent2: int; 
     score: str 
-    winner: str 
+    winner: int 
     date: datetime
     location: str
 
