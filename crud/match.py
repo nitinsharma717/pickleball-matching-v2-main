@@ -1,8 +1,9 @@
 from typing import List
 from sqlalchemy.orm import Session
 from exceptions.exceptions import MatchInfoAlreadyExistError, MatchInfoNotFoundError, MatchInfoInvalid
+from crud.player import update_player_info, get_player_info_by_id
 from models.models import MatchInfo
-from models.schemas import CreateAndUpdateMatch
+from models.schemas import CreateAndUpdateMatch, CreateAndUpdatePlayer
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -26,11 +27,41 @@ def create_match(session: Session, match_info: CreateAndUpdateMatch) -> MatchInf
         if isinstance(value, str) and value.strip() == "":
             raise MatchInfoInvalid()
 
+    # Extract winner and loser IDs from the match_info object
+    winner_id = match_info.winner
+    loser_id = match_info.opponent1 if match_info.winner != match_info.opponent1 else match_info.opponent2
+
+    # Update the winner's wins and loser's losses
+    winner_object = get_player_info_by_id(session=session, _id = winner_id)
+    loser_object = get_player_info_by_id(session=session, _id = loser_id)
+
+    update_player_info(session, winner_id, CreateAndUpdatePlayer(
+        firstName = winner_object.firstName,
+        lastName = winner_object.lastName,
+        email = winner_object.email,
+        rating = winner_object.rating,
+        middleInitials = winner_object.middleInitials,
+        win = winner_object.win + 1,
+        loss = winner_object.loss,
+    ))
+    
+    update_player_info(session, loser_id, CreateAndUpdatePlayer(
+        firstName = loser_object.firstName,
+        lastName = loser_object.lastName,
+        email = loser_object.email,
+        rating = loser_object.rating,
+        middleInitials = loser_object.middleInitials,
+        win = loser_object.win,
+        loss = loser_object.loss + 1,
+    ))
+
     new_match_info = MatchInfo(**match_info.dict())
     session.add(new_match_info)
     session.commit()
     session.refresh(new_match_info)
     return new_match_info
+
+
 
 
 def update_match_info(session: Session, _id: int, info_update: CreateAndUpdateMatch) -> MatchInfo:
