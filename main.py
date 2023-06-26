@@ -4,10 +4,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
-import api
+from api import api
 
 # Initialize the app
 app = FastAPI()
+
+app.include_router(api.router)
 
 origins = ["*"]
 
@@ -23,4 +25,4 @@ app.include_router(api.router)
 # GET operation at route '/'
 @app.get('/')
 def root_api():
-    return {"message": "Welcome to Balasundar's Technical Blog"}
+    return {"message": "HEE HEE HEE HAW! OOH HOO HOO HUI! GRRRRR!"}

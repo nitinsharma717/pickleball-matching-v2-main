@@ -1,14 +1,11 @@
-# crud.py
 from typing import List
 from sqlalchemy.orm import Session
-from exceptions import PlayerInfoInfoAlreadyExistError, PlayerInfoNotFoundError, PlayerInfoInvalid, EmailInvalid
-from models import PlayerInfo
-from schemas import CreateAndUpdatePlayer
+from exceptions.exceptions import PlayerInfoInfoAlreadyExistError, PlayerInfoNotFoundError, PlayerInfoInvalid, EmailInvalid
+from models.models import PlayerInfo
+from models.schemas import CreateAndUpdatePlayer
 from email_validator import validate_email, EmailNotValidError
 
-
-
-# Function to get list of Player info
+# Player API 
 def get_all_players(session: Session, limit: int, offset: int) -> List[PlayerInfo]:
     return session.query(PlayerInfo).offset(offset).limit(limit).all()
 
@@ -66,6 +63,8 @@ def update_player_info(session: Session, _id: int, info_update: CreateAndUpdateP
     player_info.email = info_update.email
     player_info.rating = info_update.rating
     player_info.middleInitials = info_update.middleInitials
+    player_info.win = info_update.win
+    player_info.loss = info_update.loss
 
     session.commit()
     session.refresh(player_info)
@@ -82,3 +81,7 @@ def delete_player_info(session: Session, _id: int):
 
     session.delete(player_info)
     session.commit()
+
+
+# Match API
+
