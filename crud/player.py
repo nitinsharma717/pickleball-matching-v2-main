@@ -65,6 +65,7 @@ def update_player_info(session: Session, _id: int, info_update: CreateAndUpdateP
     player_info.middleInitials = info_update.middleInitials
     player_info.win = info_update.win
     player_info.loss = info_update.loss
+    player_info.notes = info_update.notes
 
     session.commit()
     session.refresh(player_info)

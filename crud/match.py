@@ -27,7 +27,33 @@ def create_match(session: Session, match_info: CreateAndUpdateMatch) -> MatchInf
         if isinstance(value, str) and value.strip() == "":
             raise MatchInfoInvalid()
 
-    # Extract winner and loser IDs from the match_info object
+
+    new_match_info = MatchInfo(**match_info.dict())
+    session.add(new_match_info)
+    session.commit()
+    session.refresh(new_match_info)
+    return new_match_info
+
+
+
+
+def update_match_info(session: Session, _id: int, info_update: CreateAndUpdateMatch) -> MatchInfo:
+    match_info = get_match_info_by_id(session, _id)
+
+    if match_info is None:
+        raise MatchInfoNotFoundError
+
+    match_info.opponent1 = info_update.opponent1
+    match_info.opponent2 = info_update.opponent2
+    match_info.score = info_update.score
+    match_info.winner = info_update.winner
+    match_info.date = info_update.date
+    match_info.location = info_update.location
+    match_info.status = info_update.status
+    match_info.opponent1Name = info_update.opponent1Name
+    match_info.opponent2Name = info_update.opponent2Name
+    match_info.winnerName = info_update.winnerName
+
     winner_id = match_info.winner
     loser_id = match_info.opponent1 if match_info.winner != match_info.opponent1 else match_info.opponent2
 
@@ -54,29 +80,6 @@ def create_match(session: Session, match_info: CreateAndUpdateMatch) -> MatchInf
         win = loser_object.win,
         loss = loser_object.loss + 1,
     ))
-
-    new_match_info = MatchInfo(**match_info.dict())
-    session.add(new_match_info)
-    session.commit()
-    session.refresh(new_match_info)
-    return new_match_info
-
-
-
-
-def update_match_info(session: Session, _id: int, info_update: CreateAndUpdateMatch) -> MatchInfo:
-    match_info = get_match_info_by_id(session, _id)
-
-    if match_info is None:
-        raise MatchInfoNotFoundError
-
-    match_info.opponent1 = info_update.opponent1
-    match_info.opponent2 = info_update.opponent2
-    match_info.score = info_update.score
-    match_info.winner = info_update.winner
-    match_info.date = info_update.date
-    match_info.location = info_update.location
-
     session.commit()
     session.refresh(match_info)
 

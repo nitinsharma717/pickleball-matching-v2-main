@@ -1,5 +1,5 @@
 from sqlalchemy.schema import Column
-from sqlalchemy.types import String, Integer, Enum, DateTime
+from sqlalchemy.types import String, Integer, Enum, DateTime, JSON
 from database.database import Base
 from sqlalchemy.orm import validates
 import enum
@@ -16,6 +16,7 @@ class PlayerInfo(Base):
     rating = Column(String, nullable=False)
     win = Column(Integer, nullable = True)
     loss = Column(Integer, nullable = True)
+    notes = Column(String, nullable = True)
 
 
 class MatchInfo(Base):
@@ -27,5 +28,23 @@ class MatchInfo(Base):
     winner = Column(Integer, nullable = False)
     date = Column(DateTime, nullable = False)
     location = Column(String, nullable = False)
+    status = Column(String, nullable = False)
+    opponent1Name = Column(String, nullable = False)
+    opponent2Name = Column(String, nullable = False)
+    winnerName = Column(String, nullable = False)
+
+class DoublesMatchInfo(Base):
+    __tablename__ = "doubles-match"
+    id = Column(Integer, primary_key=True, index=True)
+    team1 = Column(JSON, nullable=False)
+    team2 = Column(JSON, nullable=False)
+    score = Column(String, nullable = False)
+    winner = Column(JSON, nullable = False)
+    date = Column(DateTime, nullable = False)
+    location = Column(String, nullable = False)
+    status = Column(String, nullable = False)
+    team1Name = Column(String, nullable = False)
+    team2Name = Column(String, nullable = False)
+    winnerName = Column(String, nullable = False)
     
 
