@@ -42,6 +42,8 @@ def update_doubles_match_info(session: Session, _id: int, info_update: CreateAnd
     if doubles_match_info is None:
         raise DoublesMatchNotFoundError
 
+    matchStatus = doubles_match_info.status
+
     doubles_match_info.team1 = info_update.team1
     doubles_match_info.team2 = info_update.team2
     doubles_match_info.score = info_update.score
@@ -61,52 +63,50 @@ def update_doubles_match_info(session: Session, _id: int, info_update: CreateAnd
     first_loser_object = get_player_info_by_id(session=session, _id=loser_id['player1'])
     second_loser_object = get_player_info_by_id(session=session, _id=loser_id['player2'])
 
-    print(winner_id)
-    print(loser_id)
+    if (matchStatus != "COMPLETED"):
+        update_player_info(session, winner_id['player1'], CreateAndUpdatePlayer(
+            firstName = first_winner_object.firstName,
+            lastName = first_winner_object.lastName,
+            email = first_winner_object.email,
+            rating = first_winner_object.rating,
+            middleInitials = first_winner_object.middleInitials,
+            win = first_winner_object.win + 1,
+            loss = first_winner_object.loss,
+            notes = first_winner_object.notes
+        ))
 
-    update_player_info(session, winner_id['player1'], CreateAndUpdatePlayer(
-        firstName = first_winner_object.firstName,
-        lastName = first_winner_object.lastName,
-        email = first_winner_object.email,
-        rating = first_winner_object.rating,
-        middleInitials = first_winner_object.middleInitials,
-        win = first_winner_object.win + 1,
-        loss = first_winner_object.loss,
-        notes = first_winner_object.notes
-    ))
+        update_player_info(session, winner_id['player2'], CreateAndUpdatePlayer(
+            firstName = second_winner_object.firstName,
+            lastName = second_winner_object.lastName,
+            email = second_winner_object.email,
+            rating = second_winner_object.rating,
+            middleInitials = second_winner_object.middleInitials,
+            win = second_winner_object.win + 1,
+            loss = second_winner_object.loss,
+            notes = second_winner_object.notes
+        ))
+        
+        update_player_info(session, loser_id['player1'], CreateAndUpdatePlayer(
+            firstName = first_loser_object.firstName,
+            lastName = first_loser_object.lastName,
+            email = first_loser_object.email,
+            rating = first_loser_object.rating,
+            middleInitials = first_loser_object.middleInitials,
+            win = first_loser_object.win,
+            loss = first_loser_object.loss + 1,
+            notes = first_loser_object.notes
+        ))
 
-    update_player_info(session, winner_id['player2'], CreateAndUpdatePlayer(
-        firstName = second_winner_object.firstName,
-        lastName = second_winner_object.lastName,
-        email = second_winner_object.email,
-        rating = second_winner_object.rating,
-        middleInitials = second_winner_object.middleInitials,
-        win = second_winner_object.win + 1,
-        loss = second_winner_object.loss,
-        notes = second_winner_object.notes
-    ))
-    
-    update_player_info(session, loser_id['player1'], CreateAndUpdatePlayer(
-        firstName = first_loser_object.firstName,
-        lastName = first_loser_object.lastName,
-        email = first_loser_object.email,
-        rating = first_loser_object.rating,
-        middleInitials = first_loser_object.middleInitials,
-        win = first_loser_object.win,
-        loss = first_loser_object.loss + 1,
-        notes = first_loser_object.notes
-    ))
-
-    update_player_info(session, loser_id['player2'], CreateAndUpdatePlayer(
-        firstName = second_loser_object.firstName,
-        lastName = second_loser_object.lastName,
-        email = second_loser_object.email,
-        rating = second_loser_object.rating,
-        middleInitials = second_loser_object.middleInitials,
-        win = second_loser_object.win,
-        loss = second_loser_object.loss + 1,
-        notes = second_loser_object.notes
-    ))
+        update_player_info(session, loser_id['player2'], CreateAndUpdatePlayer(
+            firstName = second_loser_object.firstName,
+            lastName = second_loser_object.lastName,
+            email = second_loser_object.email,
+            rating = second_loser_object.rating,
+            middleInitials = second_loser_object.middleInitials,
+            win = second_loser_object.win,
+            loss = second_loser_object.loss + 1,
+            notes = second_loser_object.notes
+        ))
 
     session.commit()
     session.refresh(doubles_match_info)
