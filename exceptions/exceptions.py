@@ -44,3 +44,25 @@ class MatchInfoAlreadyExistError(MatchInfoException):
     def __init__(self):
         self.status_code = 409
         self.detail = "Match Info Already Exists"
+
+class DoublesMatchException(Exception):
+    ...
+
+
+class DoublesMatchNotFoundError(DoublesMatchException):
+    def __init__(self):
+        self.status_code = 404
+        self.detail = "Doubles Match Not Found"
+
+
+class DoublesMatchInvalidError(DoublesMatchException):
+    def __init__(self):
+        self.status_code = 422
+        self.detail = "Doubles Match Invalid"
+
+
+class DoublesMatchAlreadyExistError(DoublesMatchException):
+    def __init__(self):
+        self.status_code = 409
+        self.detail = "Doubles Match Already Exists"
+
